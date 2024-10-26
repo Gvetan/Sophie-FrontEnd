@@ -17,14 +17,30 @@ document.getElementById('login-form').addEventListener('submit', async function 
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(user)
-    })
-    const result = await response.json()
+    });
 
-    console.log(result.token)
+    if (response.ok) {
+      const result = await response.json();
+      localStorage.setItem('token', result.token); // Sauvegarde du token dans le localStorage
+      afficherModeEdition(); // Affiche le mode édition
+    } else {
+      afficherErreur("Mot de passe incorrect");
+    }
 
+  } catch (error) {
+    console.error(error);
+    afficherErreur("Une erreur est survenue");
   }
-  catch (error) {
-    console.error(error)
-  }
+});
 
-})
+// Fonction pour afficher le mode édition
+function afficherModeEdition() {
+  document.getElementById('mode-edition').style.display = 'block';
+  document.getElementById('login-form').style.display = 'none';
+}
+
+// Fonction pour masquer le mode édition
+function masquerModeEdition() {
+  document.getElementById('mode-edition').style.display = 'none';
+  document.getElementById('login-form').style.display = 'block';
+}
